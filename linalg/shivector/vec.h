@@ -12,11 +12,13 @@ private:
     vector add_cpu(const vector *a, const vector *b) const;
     vector sub_cpu(const vector *a, const vector *b) const;
     vector dot_cpu(const vector *a, const vector *b) const;
+    bool equivalent_cpu(const vector *a, const vector *b) const;
 
     // GPU operator overloaded functions
     vector add_gpu(const vector *a, const vector *b) const;
     vector sub_gpu(const vector *a, const vector *b) const;
     vector dot_gpu(const vector *a, const vector *b) const;
+    bool equivalent_gpu(const vector *a, const vector *b) const;
 
 public:
     int size;
@@ -38,9 +40,14 @@ public:
     vector operator+(const vector &b);
     vector operator-(const vector &b);
     vector operator*(const vector &b);
+    vector operator==(const vector &b);
 
-    // Getter functions
-    int get_size() const;
+    // Utility functions
+    void append(float t);
+    template <typename T>
+    void append(T t);
+    void resize(int new_size);
+    void switch_mode();
 };
 
 // Constructer given a generic array type
@@ -95,4 +102,29 @@ vector vector::operator+(const vector &b)
     {
         dot_cpu(this, &b);
     }
+}
+
+vector vector::operator==(const vector &b)
+{
+    if (gpu_enabled)
+    {
+        equivalent_gpu(this, &b);
+    }
+    else
+    {
+        equivalent_cpu(this, &b);
+    }
+}
+
+// Utility functions
+template <typename T>
+void vector::append(T t) {
+    static_assert(std::is_arithmetic<T>::value, "Input parameter must be numerical!");
+
+    if(size >= capacity)
+    {
+        resize(capacity * 2);
+    }
+    data[size] = t;
+    ++size;
 }
