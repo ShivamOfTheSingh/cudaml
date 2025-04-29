@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/ssingh/documents/cudaml/linalg/shivector",
-      "program": "/Users/ssingh/documents/cudaml/linalg/shivector/build/Debug/outDebug"
+      "cwd": "/Users/ssingh/documents/cudaml/linalg/vector",
+      "program": "/Users/ssingh/documents/cudaml/linalg/vector/build/Debug/outDebug"
     }
   ]
 }
