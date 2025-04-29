@@ -40,6 +40,8 @@ public:
     vector operator+(const vector &b);
     vector operator-(const vector &b);
     vector operator*(const vector &b);
+    vector operator/(const vector &b);
+    vector operator/(const int &b);
     vector operator==(const vector &b);
 
     // Utility functions
@@ -125,6 +127,6 @@ void vector::append(T t) {
     {
         resize(capacity * 2);
     }
-    data[size] = t;
+    data[size] = static_cast<float>(t);
     ++size;
 }

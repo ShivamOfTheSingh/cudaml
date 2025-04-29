@@ -1,6 +1,8 @@
 // vec.cpp
 #include "vec.h"
 #include <stdexcept>
+#include <iostream>
+#include <string>
 
 // Constructor if data is not given
 vector::vector(int size, bool gpu_enabled)
@@ -116,4 +118,21 @@ void vector::resize(int new_size)
     delete[] data;
     data = temp;
     capacity = new_capacity;
+}
+
+void vector::append(float t)
+{
+    if (size >= capacity)
+    {
+        resize(capacity * 2);
+    }
+    data[size] = t;
+    ++size;
+}
+
+void vector::switch_mode()
+{
+    gpu_enabled = !gpu_enabled;
+    std::string flair = gpu_enabled ? "GPU" : "CPU";
+    std::cout << "Switched to " << flair << "mode\n";
 }
