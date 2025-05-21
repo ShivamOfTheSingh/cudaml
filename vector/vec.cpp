@@ -84,6 +84,22 @@ vector vector::dot_cpu(const vector *a, const vector *b) const
     return c;
 }
 
+vector vector::div_cpu(const vector *a, const int b) const
+{
+    if (b == 0)
+    {
+        throw std::invalid_argument("Cannot divide by zero!");
+    }
+    int c = 0;
+
+    for (int i = 0; i < a->size; ++i)
+    {
+        c += a->data[i] / b;
+    }
+
+    return c;
+}
+
 bool vector::equivalent_cpu(const vector *a, const vector *b) const
 {
     if (a->size != b->size)

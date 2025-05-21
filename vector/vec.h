@@ -12,12 +12,14 @@ private:
     vector add_cpu(const vector *a, const vector *b) const;
     vector sub_cpu(const vector *a, const vector *b) const;
     vector dot_cpu(const vector *a, const vector *b) const;
+    vector div_cpu(const vector *a, const int b) const;
     bool equivalent_cpu(const vector *a, const vector *b) const;
 
     // GPU operator overloaded functions
     vector add_gpu(const vector *a, const vector *b) const;
     vector sub_gpu(const vector *a, const vector *b) const;
     vector dot_gpu(const vector *a, const vector *b) const;
+    vector div_gpu(const vector *a, const int b) const;
     bool equivalent_gpu(const vector *a, const vector *b) const;
 
 public:
@@ -40,9 +42,8 @@ public:
     vector operator+(const vector &b);
     vector operator-(const vector &b);
     vector operator*(const vector &b);
-    vector operator/(const vector &b);
     vector operator/(const int &b);
-    vector operator==(const vector &b);
+    bool operator==(const vector &b);
 
     // Utility functions
     void append(float t);
@@ -70,51 +71,75 @@ vector::vector(int size, T *input_data, bool gpu_enabled)
 }
 
 
-// Opereator overloaded functions
+// Operator overloaded functions
 vector vector::operator+(const vector &b)
 {
-    if(gpu_enabled)
+    vector c;
+    if (gpu_enabled)
     {
-        add_gpu(this, &b);
+        c = add_gpu(this, &b);
     } else 
     {
-        add_cpu(this, &b);
+        c = add_cpu(this, &b);
     }
+
+    return c;
 }
 
-vector vector::operator+(const vector &b)
+vector vector::operator-(const vector &b)
 {
+    vector c;
     if (gpu_enabled)
     {
-        sub_gpu(this, &b);
+        c = sub_gpu(this, &b);
     }
     else
     {
-        sub_cpu(this, &b);
+        c = sub_cpu(this, &b);
     }
+
+    return c;
 }
 
-vector vector::operator+(const vector &b)
+vector vector::operator*(const vector &b)
 {
+    vector c;
     if (gpu_enabled)
     {
-        dot_gpu(this, &b);
+        c = dot_gpu(this, &b);
     }
     else
     {
-        dot_cpu(this, &b);
+        c = dot_cpu(this, &b);
     }
+
+    return c;
 }
 
-vector vector::operator==(const vector &b)
+vector vector::operator/(const int &b)
 {
+    vector c;
     if (gpu_enabled)
     {
-        equivalent_gpu(this, &b);
+        c = div_gpu(this, b);
     }
     else
     {
-        equivalent_cpu(this, &b);
+        c = div_cpu(this, b);
+    }
+
+    return c;
+}
+
+bool vector::operator==(const vector &b)
+{
+    if (gpu_enabled)
+    {
+        return equivalent_gpu(this, &b);
+    }
+    else
+    {
+        return equivalent_cpu(this, &b);
     }
 }
 
